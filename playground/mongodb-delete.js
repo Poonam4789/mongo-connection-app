@@ -13,37 +13,45 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', function (err, db) {
     //         return console.log("unable to fetch records");
     //     }
     // });
-//deleteMany
-// db.collection('Todos').deleteMany({text: 'eat lunch'}).then((result)=>{
-//     if(result){
-//         console.log(result);
-//     }
-// });
+    //deleteMany
+    // db.collection('Todos').deleteMany({text: 'eat lunch'}).then((result)=>{
+    //     if(result){
+    //         console.log(result);
+    //     }
+    // });
 
-// db.collection('Users').deleteMany({name: 'Poonam Patel'}).then((result)=>{
-//     if(result){
-//         console.log(result);
-//     }
-// });
-//deleteOne
-// db.collection('Todos').deleteOne({text: 'eat lunch'}).then((result)=>{
-//     if(result){
-//         console.log(result);
-//     }
-// });
+    // db.collection('Users').deleteMany({name: 'Poonam Patel'}).then((result)=>{
+    //     if(result){
+    //         console.log(result);
+    //     }
+    // });
+    //deleteOne
+    // db.collection('Todos').deleteOne({text: 'eat lunch'}).then((result)=>{
+    //     if(result){
+    //         console.log(result);
+    //     }
+    // });
 
-//findAnddelete
-// db.collection('Todos').findOneAndDelete({text: 'eat lunch'}).then((result)=>{
-//     if(result){
-//         console.log(result);
-//     }
-// });
+    //findAnddelete
+    // db.collection('Todos').findOneAndDelete({text: 'eat lunch'}).then((result)=>{
+    //     if(result){
+    //         console.log(result);
+    //     }
+    // });
 
-db.collection('Users').findOneAndDelete({name: 'sakshi shrivastava'}).then((result)=>{
-    if(result){
-        console.log(result);
-    }
-});
+    // db.collection('Users').findOneAndDelete({name: 'sakshi shrivastava'}).then((result)=>{
+    //     if(result){
+    //         console.log(result);
+    //     }
+    // });
 
-   // db.close();
+    db.collection('Users').findOneAndUpdate({ name: 'malika raj' }, {
+        $set: { name: 'ayush agrawal' }
+    }, { returnOriginal: false }).then((result) => {
+        if (result) {
+            console.log(result);
+        }
+    });
+
+    // db.close();
 });
