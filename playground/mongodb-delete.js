@@ -39,19 +39,13 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', function (err, db) {
     //     }
     // });
 
-    // db.collection('Users').findOneAndDelete({name: 'sakshi shrivastava'}).then((result)=>{
-    //     if(result){
-    //         console.log(result);
-    //     }
-    // });
-
-    db.collection('Users').findOneAndUpdate({ name: 'malika raj' }, {
-        $set: { name: 'ayush agrawal' }
-    }, { returnOriginal: false }).then((result) => {
-        if (result) {
+    db.collection('Users').findOneAndDelete({name: 'sakshi shrivastava'}).then((result)=>{
+        if(result){
             console.log(result);
         }
     });
+
+   
 
     // db.close();
 });
