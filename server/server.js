@@ -61,3 +61,5 @@ app.listen(3000, () => {
 // },(e)=>{
 //     console.log('error in saving user',e);
 // });
+
+module.exports={app};
