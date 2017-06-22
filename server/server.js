@@ -8,7 +8,9 @@ const { ObjectID } = require('mongodb');
 var { mongoose } = require('./db/mongoose');
 var { Todo } = require('./models/todo');
 var { User } = require('./models/user');
-var {authenticate} = require('./middleware/authenticate');
+var { authenticate } = require('./middleware/authenticate');
+const bcryptjs = require('bcryptjs');
+
 var app = express();
 const port = process.env.PORT || 3000;
 
@@ -112,6 +114,34 @@ app.post('/users', (req, res) => {
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });
+
+app.post('/users/login', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);
+    User.findByCredentials(body.email, body.password).then((user) => {
+        //res.send(user);
+        return user.generateAuthToken().then((token) => {
+            res.header('x-auth', token).send(user);
+        });
+    }).catch((e) => {
+        res.status(400).send();
+    });
+
+});
+
+// var authenticateLogin = (req, res, next) => {
+
+
+//     User.findOne(email).then((user) => {
+//         if (!user) {
+//             console.log('user', user);
+//             //return Promise.reject();
+//         }
+//         req.user = user;
+//         next();
+//     }).catch((e) => {
+//         res.status(401).send();
+//     });
+// };
 
 
 app.listen(port, () => {
