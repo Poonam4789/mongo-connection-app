@@ -87,7 +87,7 @@ app.patch('/todos/:id', (req, res) => {
         body.completed = false;
         body.completedAt = null;
     }
-    Todo.findByIdAndUpdate(id, { $set: body }, { new: true }).then((todo) => {
+    Todo.findByIdAndUpdate(id, { $set : body }, { new : true }).then((todo) => {
         if (!todo) {
             return res.status(404).send();
         }
@@ -128,21 +128,13 @@ app.post('/users/login', (req, res) => {
 
 });
 
-// var authenticateLogin = (req, res, next) => {
-
-
-//     User.findOne(email).then((user) => {
-//         if (!user) {
-//             console.log('user', user);
-//             //return Promise.reject();
-//         }
-//         req.user = user;
-//         next();
-//     }).catch((e) => {
-//         res.status(401).send();
-//     });
-// };
-
+app.delete('/users/me/token', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(() => {
+        req.status(200).send();
+    }, () => {
+        req.status(400).send();
+    });
+});
 
 app.listen(port, () => {
     console.log(`server is listening at port ${port}`);
