@@ -9,25 +9,27 @@ const userTwoId = new ObjectID();
 const users = [{
     _id: userOneId,
     email: 'poonam@gmail.com',
-    password :'userOnePass',
-    tokens:[{
-        access :'auth',
-        token : jwt.sign({_id: userOneId ,access: 'auth'},'abc123').toString()
-     }]
+    password: 'userOnePass',
+    tokens: [{
+        access: 'auth',
+        token: jwt.sign({ _id: userOneId, access: 'auth' }, 'abc123').toString()
+    }]
 }, {
     _id: userTwoId,
     email: 'poonam.patel@gmail.com',
-    password :'userTwoPass',
+    password: 'userTwoPass',
 }];
 
 const todos = [{
     _id: new ObjectID(),
-    text: 'hello world'
+    text: 'hello world',
+    _creator: userOneId
 }, {
     _id: new ObjectID(),
     text: 'goodbye world',
-    completed :true,
-    completedAt: 333
+    completed: true,
+    completedAt: 333,
+    _creator: userTwoId
 }];
 
 const populateTodos = (done) => {
@@ -38,14 +40,14 @@ const populateTodos = (done) => {
 
 const populateUsers = (done) => {
     User.remove({}).then(() => {
-    var userOne = new User(users[0]).save();
-    var userTwo = new User(users[1]).save();
+        var userOne = new User(users[0]).save();
+        var userTwo = new User(users[1]).save();
 
-    Promise.all([userOne,userTwo]);
+        Promise.all([userOne, userTwo]);
     }).then(() => done());
 };
 
-module.exports={
+module.exports = {
     todos,
     populateTodos,
     users,
