@@ -44,6 +44,24 @@ app.get('/todos', authenticate, (req, res) => {
     })
 });
 
+app.get('/todos/:id',(req,res)=>{
+var id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Todo.findById(id).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();
+    }
+
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  });
+});
+
 app.post('/user/:id',authenticate, (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -63,31 +81,48 @@ app.post('/user/:id',authenticate, (req, res) => {
     });
 });
 
-app.delete('/todos/:id', authenticate, (req, res) => {
-    var id = req.params.id;
-    if (!ObjectID.isValid(id)) {
-        res.status(404).send();
+// app.delete('/todos/:id', authenticate, (req, res) => {
+//     var id = req.params.id;
+//     if (!ObjectID.isValid(id)) {
+//         res.status(404).send();
+//     }
+
+//     Todo.findOne({
+//         _id: id,
+//         _creator: req.user._id
+//     }).then((todo) => {
+//         if (!todo) {
+//             return res.status(404).send();
+//         }
+//         res.send({ todo });
+//     }).catch((e) => {
+//         res.status(400).send(e);
+//     });
+// });
+
+app.delete('/todos/:id', (req, res) => {
+  var id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Todo.findByIdAndRemove(id).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();
     }
 
-    Todo.findOne({
-        _id: id,
-        _creator: req.user._id
-    }).then((todo) => {
-        if (!todo) {
-            return res.status(404).send();
-        }
-        res.send({ todo });
-    }).catch((e) => {
-        res.status(400).send(e);
-    });
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  });
 });
-
 
 app.patch('/todos/:id',authenticate, (req, res) => {
     var id = req.params.id;
     var body = _.pick(req.body, ['text', 'completed']);
     if (!ObjectID.isValid(id)) {
-        res.status(404).send();
+      return res.status(404).send();
     }
 
     if (_.isBoolean(body.completed) && body.completed) {
@@ -106,7 +141,7 @@ app.patch('/todos/:id',authenticate, (req, res) => {
     });
 });
 
-app.post('/users', authenticate,(req, res) => {
+app.post('/users', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
     var user = new User(body);
     user.save().then((user) => {
